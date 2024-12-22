@@ -12,3 +12,7 @@ class Product(ProductBase):
 
     class Config:
         orm_mode = True
+
+class ProductCreate(BaseModel):
+    title: str
+    price: str

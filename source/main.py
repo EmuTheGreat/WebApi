@@ -11,6 +11,7 @@ from crud import (
     create_product,
     delete_product,
     async_parse_products,
+    update_product
 )
 from websocket_manager import ConnectionManager
 
@@ -65,6 +66,14 @@ async def start_parsing(db: AsyncSession = Depends(get_db)):
     return {"message": "Парсинг завершён"}
 
 
+@app.put("/products/{product_id}", response_model=Product)
+async def update_product_endpoint(product_id: int, product: ProductCreate, db: AsyncSession = Depends(get_db)):
+    updated_product = await update_product(db, product_id, product)
+    if updated_product is None:
+        raise HTTPException(status_code=404, detail="Продукт не найден.")
+    await manager.broadcast(f"Продукт {product_id} обновлён.")
+    return updated_product
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
@@ -73,6 +82,5 @@ async def websocket_endpoint(websocket: WebSocket):
             await websocket.receive_text()
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-
 
 

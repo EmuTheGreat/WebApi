@@ -30,12 +30,19 @@ async def delete_product(db: AsyncSession, product_id: int):
     await db.commit()
     return True
 
+# Обновить продукт по ID
+async def update_product(db: AsyncSession, product_id: int, product_data: ProductCreate):
+    db_product = await get_product(db, product_id)
+    if db_product is None:
+        return None
+    db_product.title = product_data.title
+    db_product.price = product_data.price
+    await db.commit()
+    await db.refresh(db_product)
+    return db_product
+
 # Асинхронный парсер
 from parser import parse_products_async
-
-from websocket_manager import ConnectionManager
-
-manager = ConnectionManager()
 
 async def async_parse_products(db: AsyncSession):
     products = await parse_products_async()
@@ -43,5 +50,3 @@ async def async_parse_products(db: AsyncSession):
         db_product = Product(title=product["Название"], price=product["Цена"])
         db.add(db_product)
     await db.commit()
-    await manager.broadcast(f"Парсинг завершён. {len(products)} продукт добавлен.")
-
