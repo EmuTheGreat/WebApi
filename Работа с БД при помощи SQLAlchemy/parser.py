@@ -39,3 +39,4 @@ async def parse_products_async():
 
     return product_data
 
+
