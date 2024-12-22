@@ -23,4 +23,8 @@
 ### 1. Клонировать репозиторий
 ```bash
 git clone https://github.com/EmuTheGreat/WebApi.git
-cd fastapi-websocket-crud
+cd WebApi
+### 2. Установка зависимостей:
+pip install -r requirements.txt
+
+
