@@ -25,5 +25,5 @@
 
 ### 1. Клонировать репозиторий
 ```bash
-git clone https://github.com/EmuTheGreat/WebApi/fastapi-websocket-crud.git
+git clone https://github.com/EmuTheGreat/WebApi.git
 cd fastapi-websocket-crud
